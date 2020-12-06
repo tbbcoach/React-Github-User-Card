@@ -6,7 +6,8 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      user: {}
+      user: {},
+      followers: []
     }
   }
 
@@ -22,27 +23,45 @@ class App extends React.Component {
       })
   
       .catch(err => console.log('error', err));
-  }
+  
 
+    axios
+      .get('https://api.github.com/users/tbbcoach/followers')
+      .then(res => {
+        console.log(res)
+        this.setState({
+          ...this.state,
+          followers: res.data
+        });
+      })
+      
+      .catch(err => console.log('error', err))
+    }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState !== this.state.followers) {
+      console.log('Followers have changed!');
+    }
+
+  
+  }
 
   render() {
     return (
       <div className="App">
         <header className="App-header">
           <h1>GitHub User Card and Followers</h1>
+          <img className='pic' width='150' height='150' src={this.state.user.avatar_url} alt = 'user pic'/>
           <h2>Username: {this.state.user.login}</h2>
           <h2>Name: {this.state.user.name}</h2>
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-        </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-        </a>
+          <p>Location: {this.state.user.location}</p>
+          <p>Bio: {this.state.user.bio}</p>
+       <h3 className='followers'>GitHub Followers!</h3>    
+        <div className='git-followers'>
+            {this.state.followers.map((follower) => (
+              <p>Name: {follower.login}</p>
+           ))}
+        </div>
+          
         </header>
       </div>
     );

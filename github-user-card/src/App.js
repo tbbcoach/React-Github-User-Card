@@ -58,7 +58,10 @@ class App extends React.Component {
        <h3 className='followers'>GitHub Followers!</h3>    
         <div className='git-followers'>
             {this.state.followers.map((follower) => (
-              <p>Name: {follower.login}</p>
+              <p>Name: {follower.login}
+              
+                <img className='image' src={follower.avatar_url} alt='follower' />
+              </p>
            ))}
         </div>
           
